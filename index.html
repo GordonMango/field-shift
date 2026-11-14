@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Defend Your Farm — A NASA-Powered Climate Survival Game</title>
+<meta name="description" content="A Plants-vs-Zombies-style farming game where the zombies are droughts, floods, heatwaves and pests, and every week of weather comes from live NASA POWER data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ================= TITLE ================= -->
+  <section id="screen-title" class="screen active">
+    <div class="title-card">
+      <div class="eyebrow">★ NASA Space Apps Challenge ★</div>
+      <h1>Defend Your Farm</h1>
+      <p class="tagline">A NASA-powered climate survival game. Plants vs. Zombies, except the zombies are droughts, floods, heatwaves, wind erosion, frost and pests, and the plants are real farming practices.</p>
+      <div class="pillars">
+        <div><b>Real data</b><span>Every week of weather is pulled live from NASA POWER for the farm location you choose.</span></div>
+        <div><b>Three layers</b><span>Irrigation underground, crops on the ground, row covers in the sky, all in one 3D field.</span></div>
+        <div><b>Learn by doing</b><span>Six stages teach one defense each, then you plan a full-year crop rotation within your own budget and water.</span></div>
+      </div>
+      <div class="guide">
+        <div id="title-farmer" class="farmer"></div>
+        <div class="guide-box"><span class="guide-tag">GUIDE</span><p>Howdy. I'm Hank. My crops keep failing and the sky keeps changing. NASA's satellites can see what's coming — help me turn their data into a farm that survives.</p></div>
+      </div>
+      <div class="actions">
+        <button id="btn-start" class="btn primary">▶ Start farming</button>
+        <button id="btn-manual-title" class="btn">Open the farming manual</button>
+      </div>
+      <div class="credits">Data: NASA POWER (MERRA-2 / GEOS) · Modelled on SMAP, GPM IMERG, MODIS, Landsat, ECOSTRESS · Built with Three.js</div>
+    </div>
+  </section>
+
+  <!-- ================= SETUP ================= -->
+  <section id="screen-setup" class="screen">
+    <div class="setup-card">
+      <h2>Set up your farm</h2>
+      <p class="muted">Tell us where you farm and what you have to work with. The game fetches a full year of NASA POWER daily weather for that spot and finds the real dry season, windy season, flood weeks, heat dome and pest season to build each stage.</p>
+      <div class="setup-grid">
+        <div class="field">
+          <label>Farm location</label>
+          <select id="sel-region"></select>
+          <div id="custom-coords" class="coords hidden">
+            <input id="inp-lat" type="number" step="0.001" placeholder="Latitude"> <input id="inp-lon" type="number" step="0.001" placeholder="Longitude">
+          </div>
+          <div class="row-inline"><small id="region-note" class="muted"></small><button id="btn-geo" class="btn tiny">Use my location</button></div>
+        </div>
+        <div class="field">
+          <label>Data year</label>
+          <select id="sel-year"><option>2023</option><option>2024</option><option selected>2025</option></select>
+          <small class="muted">A complete calendar year from the NASA POWER archive.</small>
+        </div>
+        <div class="field">
+          <label>Starting budget <span id="lbl-budget"></span></label>
+          <input id="inp-budget" type="range" min="500" max="5000" step="100" value="1500">
+          <small class="muted">Seed and equipment money for each stage. Harvests add to it.</small>
+        </div>
+        <div class="field">
+          <label>Water allocation <span id="lbl-water"></span></label>
+          <input id="inp-water" type="range" min="50" max="600" step="10" value="200">
+          <small class="muted">Your irrigation right. Crops drink from it weekly and drip irrigation spends it; rain refills it.</small>
+        </div>
+        <div class="field">
+          <label>Difficulty</label>
+          <select id="sel-diff"><option value="easy">Easy (fewer threats)</option><option value="normal" selected>Normal</option><option value="hard">Hard</option></select>
+        </div>
+        <div class="field">
+          <label><input id="chk-unlock" type="checkbox"> Free play: unlock every stage</label>
+          <small class="muted">Handy for judges who want to jump straight to the full-year rotation.</small>
+        </div>
+      </div>
+      <h3>Choose a stage</h3>
+      <div id="stage-list" class="stage-list"></div>
+      <div class="setup-footer">
+        <div id="data-status" class="status">NASA POWER will be contacted when you press start.</div>
+        <button id="btn-fetch" class="btn primary">Fetch NASA data &amp; start</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GAME ================= -->
+  <section id="screen-game" class="screen">
+    <header id="hud-top">
+      <div class="hud-group"><span class="hud-label">Budget</span><span class="hud-value"><span id="hud-coin"></span><span id="hud-budget">$0</span></span></div>
+      <div class="hud-group water"><span class="hud-label">Water</span><span class="hud-value"><span id="hud-drop"></span><span id="hud-water">0</span></span><span class="bar"><i id="hud-water-bar"></i></span></div>
+      <div class="hud-group"><span class="hud-label">Farm</span><span id="hud-health" class="hud-value">❤️❤️❤️❤️❤️</span></div>
+      <div class="hud-group grow"><span id="hud-stage" class="hud-label"></span><span id="hud-week" class="hud-value small"></span><span class="bar"><i id="hud-week-bar"></i></span></div>
+      <div class="hud-buttons">
+        <button id="btn-pause" class="btn tiny">II Pause</button>
+        <button id="btn-speed" class="btn tiny">1×</button>
+        <button id="btn-xray" class="btn tiny" title="See underground (X)">X-ray</button>
+        <button id="btn-manual" class="btn tiny">Manual</button>
+        <button id="btn-quit" class="btn tiny">◀ Stages</button>
+      </div>
+    </header>
+    <div id="game-main">
+      <div id="canvas-wrap">
+        <canvas id="c"></canvas>
+        <div id="float-layer"></div>
+        <div class="lane-hint left">◀ farmhouse</div>
+        <div class="lane-hint right">threats arrive ▶</div>
+        <div id="toast"></div>
+      </div>
+      <aside id="side-panel">
+        <h3><span id="panel-sat"></span> NASA weather this week</h3>
+        <div id="panel-source" class="source"></div>
+        <div id="panel-week" class="week"></div>
+        <h3>Threat forecast <small>(this week → next)</small></h3>
+        <div id="panel-risk"></div>
+        <h3>Farm log</h3>
+        <div id="panel-log" class="log"></div>
+      </aside>
+    </div>
+    <footer id="toolbar"></footer>
+  </section>
+
+  <!-- ================= MODALS ================= -->
+  <div id="modal-intro" class="modal">
+    <div class="modal-box">
+      <h2 id="intro-title"></h2>
+      <p id="intro-window" class="window"></p>
+      <div class="guide small">
+        <div id="intro-farmer" class="farmer"></div>
+        <div class="guide-box"><span class="guide-tag">HANK</span><p id="intro-text"></p></div>
+      </div>
+      <div id="intro-unlocks" class="cards"></div>
+      <p class="tip"><b>TIP</b> <span id="intro-tip"></span></p>
+      <div class="modal-actions"><button id="btn-intro-start" class="btn primary">Start stage</button></div>
+    </div>
+  </div>
+
+  <div id="modal-rotation" class="modal">
+    <div class="modal-box wide">
+      <h2>Plan your crop rotation</h2>
+      <p>Choose what each lane grows in each of the four seasons. Planting happens automatically at the start of every season and is paid from your budget. You can still build defenses by hand during the year.</p>
+      <div id="rotation-grid" class="rotation-grid"></div>
+      <p id="rotation-summary" class="summary"></p>
+      <div class="two-col">
+        <div><h4>Lane analysis</h4><ul id="rotation-analysis" class="analysis"></ul></div>
+        <div><h4>Rotation rules</h4><ul id="rotation-rules" class="small"></ul></div>
+      </div>
+      <div class="modal-actions"><button id="btn-rotation-start" class="btn primary">Start the year</button></div>
+    </div>
+  </div>
+
+  <div id="modal-result" class="modal">
+    <div class="modal-box">
+      <h2 id="result-title"></h2>
+      <div id="result-body"></div>
+      <p class="tip"><b>LESSON</b> <span id="result-lesson"></span></p>
+      <div class="modal-actions">
+        <button id="btn-next" class="btn primary">Next stage ▶</button>
+        <button id="btn-retry" class="btn">Replay stage</button>
+        <button id="btn-stages" class="btn">Back to stages</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-manual" class="modal">
+    <div class="modal-box wide manual">
+      <div class="modal-head"><h2>Farming manual</h2><button class="btn tiny" data-close="modal-manual">✕ Close</button></div>
+      <div id="manual-tabs" class="tabs">
+        <button data-tab="threats" class="active">Climate threats</button>
+        <button data-tab="items">Plants &amp; tools</button>
+        <button data-tab="nasa">NASA data</button>
+        <button data-tab="rotation">Rotation &amp; layers</button>
+      </div>
+      <div id="manual-body" class="manual-body"></div>
+    </div>
+  </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/content.js"></script>
+<script src="js/pixel.js"></script>
+<script src="js/nasa.js"></script>
+<script src="js/scene.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

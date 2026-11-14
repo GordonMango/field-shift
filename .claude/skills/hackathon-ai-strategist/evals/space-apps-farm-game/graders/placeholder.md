@@ -1,0 +1,1 @@
+Human judgment: the answer references the real project (NASA POWER live data, rotation stage, manual), covers Impact/Creativity/Validity/Relevance/Presentation, includes a numbered demo script, and stays under ~600 words.
