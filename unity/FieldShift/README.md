@@ -41,12 +41,14 @@ Controls: Tab plan/walk · click a field · T tractor (W/S drive, A/D steer, C c
    - **itch.io** (simplest): zip the *contents* of `Builds/WebGL` (so `index.html` is at the top of the zip), create a
      project of kind HTML, upload the zip, tick "This file will be played in the browser", set the viewport to
      1280 x 720 and turn on the fullscreen button.
-   - **GitHub Pages**: copy the contents of `Builds/WebGL` into a folder that Pages serves (for example `docs/play/` on
-     the main branch) and enable Pages for that branch and folder in the repo settings.
+   - **GitHub Pages** (the live link, https://gordonmango.github.io/field-shift/): Pages serves the `gh-pages`
+     branch, which holds only the contents of `Builds/WebGL` plus an empty `.nojekyll` file. To update it, replace
+     that branch's files with a new build and push.
    The build uses gzip with decompression fallback, so it plays on both without special server settings.
 
-The build script turns on the PC quality level for the web and keeps the shader variants the game enables at runtime;
-see `Assets/FieldShift/Scripts/Editor/WebBuild.cs`.
+The build script makes web builds use the Mobile quality level (the PC renderer's Forward+ and SSAO passes fail in
+browsers) and keeps the shader variants the game enables at runtime. The game itself draws the terrain without
+instancing on the web, where instanced terrain renders black. See `Assets/FieldShift/Scripts/Editor/WebBuild.cs`.
 
 ## What is real data
 
@@ -111,6 +113,21 @@ Headless checks (close the project in the editor first):
 Unity -batchmode -nographics -projectPath . -executeMethod FieldShift.EditorTools.FieldShiftTools.BatchSimTest -quit
 Unity -batchmode -projectPath . -executeMethod FieldShift.EditorTools.FieldShiftTools.BatchCapture -fsLocation sumas -fsOut Logs/shots
 ```
+
+## Built with AI assistance
+
+Our team chose the challenge and set the concept and design rules: a crop-rotation game in British Columbia, a real
+location you choose, reserve land that can never be leased, Indigenous techniques that are learned rather than taken,
+cover crops, soil moisture and irrigation, a farmer who must stay solvent, and June's story.
+
+Much of the code in this repository was then written with **Claude (Anthropic) through Claude Code**, following those
+rules, and reviewed and play-tested by the team. For Field Shift that includes the Unity C# game and simulation, the
+Python data scripts in `unity/FieldShift/Tools`, the Blender Python scripts that build the 3D models, the web build,
+and parts of this documentation.
+
+No image, video or audio generation model was used. The 3D models are built by Blender scripts, and the textures and
+sky are CC0 photographs (ambientCG, Poly Haven). This note is here because the NASA Space Apps rules ask projects to
+identify SI-assisted code.
 
 ## Claude Code bridge
 

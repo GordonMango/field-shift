@@ -1,4 +1,12 @@
-# Defend Your Farm — A NASA-Powered Climate Survival Game
+# NASA Space Apps 2026: Field Shift
+
+**Play Field Shift in the browser: https://gordonmango.github.io/field-shift/**
+
+Our main entry is **Field Shift**, a first-person farming game set on real British Columbia farms, built in Unity from
+NASA POWER weather and NASADEM terrain. Its project and documentation are in [`unity/FieldShift`](unity/FieldShift).
+The rest of this page describes *Defend Your Farm*, our earlier browser prototype at the repository root.
+
+## Defend Your Farm — A NASA-Powered Climate Survival Game
 
 A farming simulation for the NASA Space Apps Challenge. Every in-game day replays one real day of
 NASA POWER weather for the farm location the player chooses. Drought, heat, wind erosion,
@@ -79,3 +87,18 @@ assets to ship. UI uses the Press Start 2P and VT323 fonts with CRT scanlines.
 - `js/nasa.js` — NASA POWER fetch, weekly indices, FAO-56 evapotranspiration, fallback climatology.
 - `js/scene.js` — Three.js scene, low-poly models, soil state and weather particles.
 - `js/game.js` — daily field simulation, placement, harvest, rotation planner, UI.
+
+## Built with AI assistance
+
+Our team chose the challenge and set the concept and design rules: a crop-rotation game in British Columbia, a real
+location you choose, reserve land that can never be leased, Indigenous techniques that are learned rather than taken,
+cover crops, soil moisture and irrigation, a farmer who must stay solvent, and June's story.
+
+Much of the code in this repository was then written with **Claude (Anthropic) through Claude Code**, following those
+rules, and reviewed and play-tested by the team. For Field Shift that includes the Unity C# game and simulation, the
+Python data scripts in `unity/FieldShift/Tools`, the Blender Python scripts that build the 3D models, the web build,
+and parts of this documentation.
+
+No image, video or audio generation model was used. The 3D models are built by Blender scripts, and the textures and
+sky are CC0 photographs (ambientCG, Poly Haven). This note is here because the NASA Space Apps rules ask projects to
+identify SI-assisted code.
