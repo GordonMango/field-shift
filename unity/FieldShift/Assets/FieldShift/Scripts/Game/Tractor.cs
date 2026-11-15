@@ -19,11 +19,19 @@ namespace FieldShift
         public bool driving;
         public float speed;
         public Transform seeder, harvester, cabCam, chaseCam;
+        // each wheel rolls about the tractor's axle through its own centre, so it works whatever axes the model was exported with
         readonly List<Transform> wheels = new List<Transform>();
+        readonly List<Vector3> wheelCentres = new List<Vector3>();   // in the wheel's own space
+        readonly List<float> wheelRadii = new List<float>();
         float steer;
 
-        float wheelRadius = 0.9f;
-        bool modelWheels;
+        void AddWheel(Transform w)
+        {
+            var b = Models.Bounds(w.gameObject);
+            wheels.Add(w);
+            wheelCentres.Add(w.InverseTransformPoint(b.center));
+            wheelRadii.Add(Mathf.Max(0.25f, b.extents.y));
+        }
 
         public static Tractor Build(World world, Vector3 pos, float yaw)
         {
@@ -46,8 +54,8 @@ namespace FieldShift
             Part(root.transform, "Exhaust", PrimitiveType.Cylinder, new Vector3(0.4f, 2.6f, 1.9f), new Vector3(0.1f, 0.7f, 0.1f), steel);
             foreach (var sx in new[] { -1f, 1f })
             {
-                t.wheels.Add(Part(root.transform, "RearWheel", PrimitiveType.Cylinder, new Vector3(sx * 1.05f, 0.85f, -0.9f), new Vector3(1.7f, 0.28f, 1.7f), dark, new Vector3(0, 0, 90)));
-                t.wheels.Add(Part(root.transform, "FrontWheel", PrimitiveType.Cylinder, new Vector3(sx * 0.85f, 0.55f, 1.8f), new Vector3(1.1f, 0.2f, 1.1f), dark, new Vector3(0, 0, 90)));
+                t.AddWheel(Part(root.transform, "RearWheel", PrimitiveType.Cylinder, new Vector3(sx * 1.05f, 0.85f, -0.9f), new Vector3(1.7f, 0.28f, 1.7f), dark, new Vector3(0, 0, 90)));
+                t.AddWheel(Part(root.transform, "FrontWheel", PrimitiveType.Cylinder, new Vector3(sx * 0.85f, 0.55f, 1.8f), new Vector3(1.1f, 0.2f, 1.1f), dark, new Vector3(0, 0, 90)));
                 Part(root.transform, "Hub", PrimitiveType.Cylinder, new Vector3(sx * 1.2f, 0.85f, -0.9f), new Vector3(0.7f, 0.02f, 0.7f), yellow, new Vector3(0, 0, 90));
             }
 
@@ -88,7 +96,7 @@ namespace FieldShift
             foreach (var n in new[] { "WheelRL", "WheelRR", "WheelFL", "WheelFR" })
             {
                 var w = Models.Find(body.transform, n);
-                if (w != null) t.wheels.Add(w);
+                if (w != null) t.AddWheel(w);
             }
             var bb = Models.Bounds(body);
             var hitch = new Vector3(0, 0.6f, root.transform.InverseTransformPoint(bb.center).z - bb.extents.z + 0.2f);
@@ -102,8 +110,6 @@ namespace FieldShift
             var col = root.AddComponent<BoxCollider>();
             col.center = new Vector3(0, 1.6f, 0); col.size = new Vector3(2.8f, 3.2f, 6.4f);
             t.implementOffset = Mathf.Abs(hitch.z) + 2.6f;
-            t.wheelRadius = 0.95f;
-            t.modelWheels = true;
             t.Place(pos, yaw);
             return t;
         }
@@ -182,8 +188,10 @@ namespace FieldShift
             p.y = (hF + hB + hR + hL) / 4;
             float pitch = Mathf.Atan2(hB - hF, 3f) * Mathf.Rad2Deg, roll = Mathf.Atan2(hL - hR, 2f) * Mathf.Rad2Deg;
             transform.SetPositionAndRotation(p, Quaternion.Euler(pitch, transform.eulerAngles.y, roll));
-            float spin = speed / Mathf.Max(0.3f, wheelRadius) * Mathf.Rad2Deg * Time.deltaTime;
-            foreach (var w in wheels) w.Rotate(modelWheels ? spin : 0, modelWheels ? 0 : speed * Time.deltaTime * 90f, 0, Space.Self);
+            // roll without slipping: angle = distance / radius, so the small front wheels turn faster than the big rear ones
+            float dist = speed * Time.deltaTime;
+            for (int i = 0; i < wheels.Count; i++)
+                wheels[i].RotateAround(wheels[i].TransformPoint(wheelCentres[i]), transform.right, dist / wheelRadii[i] * Mathf.Rad2Deg);
         }
 
         static Vector3 Flat(Vector3 v) { v.y = 0; return v.normalized; }

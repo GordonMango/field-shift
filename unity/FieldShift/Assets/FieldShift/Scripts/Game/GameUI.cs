@@ -410,7 +410,7 @@ namespace FieldShift
         {
             var p = G.selected; var sim = G.sim; var loc = G.loc;
             if (p == null) { G.panel = Panel.None; return; }
-            float w = 430, top = 110;
+            float w = 450, top = 110;
             BeginPanel(new Rect(W - w - 14, top, w, VH - top - 90));
             GUILayout.BeginHorizontal();
             string title = p.IsFarm ? $"Field {G.FieldNumber(p)}" : p.status == LandStatus.Available ? "Land for lease" : p.status == LandStatus.Reserve ? (G.data.Reserve(p.reserveId)?.name ?? "Reserve land") : p.status == LandStatus.Water ? "Water" : "Hillside forest";
@@ -418,7 +418,7 @@ namespace FieldShift
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("X", sButton, GUILayout.Width(36), GUILayout.Height(32))) { G.panel = Panel.None; G.selected = null; G.RecolourOverlay(); }
             GUILayout.EndHorizontal();
-            scroll = GUILayout.BeginScrollView(scroll);
+            scroll = GUILayout.BeginScrollView(scroll, false, false, GUIStyle.none, GUI.skin.verticalScrollbar);
 
             if (p.status == LandStatus.Available)
             {
@@ -464,7 +464,7 @@ namespace FieldShift
             NutrientBar("P", "Phosphorus", p.phosphorus, FarmSim.PTarget, new Color(0.98f, 0.7f, 0.35f));
             NutrientBar("K", "Potassium", p.potassium, FarmSim.KTarget, new Color(0.7f, 0.6f, 0.95f));
             Bar(tSoil, "Soil health", p.om / 8f, new Color(0.75f, 0.55f, 0.35f), $"{p.om:0.0}% OM");
-            GUILayout.Label($"NASA soil wetness nearby: {d.gwetRoot:0.00}   ·   white tick = what crops need", sSmall);
+            GUILayout.Label($"NASA soil wetness nearby: {d.gwetRoot:0.00}  ·  tick = what crops need", sSmall);
             float co2 = (p.year.GhgFlowsKg + p.year.SoilCarbonKg(G.cat.EF, p.om)) / 1000f;
             IconLabel(tCloud, $"Greenhouse gas this year: <b>{co2:0.0} t CO2e/ha</b>", sLabel);
 
@@ -493,7 +493,7 @@ namespace FieldShift
             {
                 GUILayout.Label(sel.description, sSmall);
                 float y = FarmSim.ExpectedYield(sel);
-                GUILayout.Label($"Takes from the soil each season: N {(sel.nDemand > 0 ? sel.nDemand.ToString("0") : "0 (fixes its own)")} · P2O5 {sel.pRemoval * y:0} · K2O {sel.kRemoval * y:0} kg/ha", sSmall);
+                GUILayout.Label($"Each season it takes N {(sel.nDemand > 0 ? sel.nDemand.ToString("0") : "0 (fixes its own)")} · P2O5 {sel.pRemoval * y:0} · K2O {sel.kRemoval * y:0} kg/ha", sSmall);
             }
 
             if (sel == null || !sel.perennial)
@@ -512,8 +512,8 @@ namespace FieldShift
                 foreach (var f in cat.root.fertilizers)
                 {
                     var a = sim.FertiliserFor(p, sel, f.id);
-                    string sub = f.id == "none" ? "free · 0 t" : $"${a.cost:N0} · {a.co2e / 1000f:0.0} t CO2e";
-                    if (Btn($"{f.name.Replace("Synthetic NPK", "Synthetic")}\n<size=11>{sub}</size>", p.plan.fert == f.id)) { p.plan.fert = f.id; Changed(); }
+                    string sub = f.id == "none" ? "free\n0 t CO2e" : $"${a.cost:N0}\n{a.co2e / 1000f:0.0} t CO2e";
+                    if (Btn($"{f.name.Replace("Synthetic NPK", "Synthetic")}\n<size=11>{sub}</size>", p.plan.fert == f.id, GUILayout.Width(88))) { p.plan.fert = f.id; Changed(); }
                 }
                 GUILayout.EndHorizontal();
                 var chosen = cat.Fertilizer(p.plan.fert);
@@ -560,9 +560,9 @@ namespace FieldShift
             // perennials: a normal year once established (planting cost is paid once)
             float perHa = (c.GrossPerHa - c.harvestCostPerHa) * cuts - (c.perennial && c.annualCostPerHa > 0 ? c.annualCostPerHa : c.costPerHa);
             var style = sel ? sTileSel : indigenous ? sTileWarm : sTile;
-            string when = c.perennial && c.yearsToFullYield > 1 ? $"full yield in {c.yearsToFullYield} yrs" : $"plant {DoyDate(c.plantFrom)}";
-            var content = new GUIContent($"<b>{Short(c)}</b>\n<size=12>{Money(perHa)}/ha · {when}</size>");
-            var r = GUILayoutUtility.GetRect(content, style, GUILayout.Height(54), GUILayout.MinWidth(170));
+            string when = c.perennial && c.yearsToFullYield > 1 ? $"from year {c.yearsToFullYield}" : $"· plant {DoyDate(c.plantFrom)}";
+            var content = new GUIContent($"<b>{Short(c)}</b>\n<size=12>{Money(perHa)}/ha {when}</size>");
+            var r = GUILayoutUtility.GetRect(content, style, GUILayout.Height(54), GUILayout.MinWidth(170), GUILayout.MaxWidth(200));
             if (GUI.Button(r, content, style)) { p.plan.main = c.id; Changed(); }
             GUI.color = c.color; GUI.DrawTexture(new Rect(r.x + 10, r.y + 15, 16, 24), tWhite); GUI.color = Color.white;
         }

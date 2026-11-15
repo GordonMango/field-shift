@@ -42,7 +42,7 @@ namespace FieldShift.EditorTools
             Directory.CreateDirectory(MatDir);
             Make("Lit", "Universal Render Pipeline/Lit", m => { m.enableInstancing = true; });
             Make("Unlit", "Universal Render Pipeline/Unlit", null);
-            Make("TerrainLit", "Universal Render Pipeline/Terrain/Lit", null);
+            Make("TerrainLit", "Universal Render Pipeline/Terrain/Lit", m => { m.enableInstancing = true; });   // terrain is drawn instanced
             Make("Overlay", "Sprites/Default", null);
             Make("Foliage", "Universal Render Pipeline/Lit", m =>
             {

@@ -89,6 +89,7 @@ namespace FieldShift
             RenderSettings.fogEndDistance = 9000;
             RenderSettings.fogColor = new Color(0.74f, 0.82f, 0.9f);
             DynamicGI.UpdateEnvironment();
+            StartCoroutine(CheckAmbient());
 
             var vol = new GameObject("Post processing").AddComponent<Volume>();
             vol.isGlobal = true;
@@ -99,6 +100,21 @@ namespace FieldShift
             var bl = prof.Add<Bloom>(true); bl.intensity.Override(0.3f); bl.threshold.Override(1.05f); bl.scatter.Override(0.65f);
             var vg = prof.Add<Vignette>(true); vg.intensity.Override(0.16f);
             vol.profile = prof;
+        }
+
+        /// <summary>Some players (web builds) can't light the scene from the sky photo at runtime; use a sky-to-ground gradient then.</summary>
+        System.Collections.IEnumerator CheckAmbient()
+        {
+            yield return null; yield return null;
+            var sh = RenderSettings.ambientProbe;
+            float l0 = sh[0, 0] + sh[1, 0] + sh[2, 0];
+            Debug.Log($"[FieldShift] lighting: quality {QualitySettings.names[QualitySettings.GetQualityLevel()]}, sky ambient {l0:0.00}, sun {(sun != null ? sun.intensity : 0):0.0}");
+            if (l0 >= 0.05f) yield break;
+            Debug.Log("[FieldShift] sky ambient unavailable, using a gradient");
+            RenderSettings.ambientMode = AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor = new Color(0.62f, 0.72f, 0.86f);
+            RenderSettings.ambientEquatorColor = new Color(0.56f, 0.6f, 0.58f);
+            RenderSettings.ambientGroundColor = new Color(0.27f, 0.25f, 0.2f);
         }
 
         [Serializable] class SkyInfo { public float sunU, sunV, exposure = 1; }

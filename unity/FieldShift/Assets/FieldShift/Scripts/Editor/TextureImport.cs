@@ -36,8 +36,7 @@ namespace FieldShift.EditorTools
             else
             {
                 ti.textureType = TextureImporterType.Default;
-                // terrain photos are read once so the game can bake a low smoothness into their alpha
-                ti.isReadable = file.StartsWith("Grass_") || file.StartsWith("Soil_") || file.StartsWith("Rock_") || file.StartsWith("ForestFloor_");
+                ti.isReadable = false;          // nothing reads these on the CPU (compressed web textures can't be read back)
                 ti.sRGBTexture = true;
             }
         }

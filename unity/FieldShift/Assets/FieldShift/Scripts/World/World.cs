@@ -78,19 +78,22 @@ namespace FieldShift
             if (tm != null) terrain.materialTemplate = tm;
             terrain.heightmapPixelError = 3;
             terrain.basemapDistance = 1200;
-            terrain.drawInstanced = true;
+            // instanced terrain reads its normals from a texture generated at runtime, which renders the ground black in browsers
+            terrain.drawInstanced = Application.platform != RuntimePlatform.WebGLPlayer;
         }
 
         TerrainLayer Layer(string name, Color a, Color b, float scale, int seed, float tile)
         {
             var photo = TexGen.Load(name + "_Color");
-            var color = photo != null ? TexGen.Matte(photo) : TexGen.Noise(name, a, b, scale, seed);
+            var color = photo != null ? photo : TexGen.Noise(name, a, b, scale, seed);
             var l = new TerrainLayer { name = name, diffuseTexture = color, tileSize = new Vector2(tile, tile) };
             var normal = TexGen.Load(name + "_Normal");
             if (normal != null) { l.normalMapTexture = normal; l.normalScale = 1; }
             if (name == "Grass" && TexGen.Load(name + "_Color") != null)
                 l.diffuseRemapMax = Color.Lerp(new Vector4(1, 1, 1, 1), new Vector4(1.25f, 1.05f, 0.7f, 1), data.def.dryGrass);
-            l.smoothness = 1f;              // final smoothness = alpha (0.06) x this
+            // URP terrain smoothness = layer smoothness x diffuse alpha. The photos have no alpha (reads as 1), the noise
+            // fallback stores 0.06 in alpha. Nothing reads pixels on the CPU, which compressed textures in web builds can't do.
+            l.smoothness = photo != null ? 0.06f : 1f;
             l.metallic = 0;
             return l;
         }

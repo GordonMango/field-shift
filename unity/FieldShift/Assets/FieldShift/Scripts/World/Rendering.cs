@@ -124,17 +124,6 @@ namespace FieldShift
         /// Terrain shaders read smoothness from the colour texture's alpha. Photos have none (alpha = 1), which
         /// makes the ground look wet and shiny, so copy the texture with a low, matte alpha.
         /// </summary>
-        public static Texture2D Matte(Texture2D src, float alpha = 0.06f)
-        {
-            if (src == null || !src.isReadable) return src;
-            var px = src.GetPixels32();
-            byte a = (byte)(alpha * 255);
-            for (int i = 0; i < px.Length; i++) px[i].a = a;
-            var t = new Texture2D(src.width, src.height, TextureFormat.RGBA32, true) { name = src.name + "_matte", wrapMode = TextureWrapMode.Repeat, anisoLevel = 4 };
-            t.SetPixels32(px); t.Apply(true, true);
-            return t;
-        }
-
         public static Texture2D Noise(string name, Color a, Color b, float scale, int seed, float speckle = 0.15f)
         {
             const int N = 256;

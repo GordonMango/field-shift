@@ -16,3 +16,5 @@
 .DS_Store
 # data tool cache
 /Tools/.cache/
+# Burst output left by WebGL builds
+/[Dd]ata/Plugins/

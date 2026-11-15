@@ -21,6 +21,33 @@ First Nation's community office and listening, not taken.
 
 Controls: Tab plan/walk · click a field · T tractor (W/S drive, A/D steer, C cab view, E get out) · R compare · J notebook · Space pause · 1/2/3 speed.
 
+## Working on it as a team
+
+- Install **exactly Unity 6000.6.9f1** with the **WebGL Build Support** module (Unity Hub → Installs → Add modules).
+  A different editor version will upgrade the project and cause merge conflicts.
+- Clone the repo, then Unity Hub → **Add project from disk** → `unity/FieldShift`. The first open takes a few minutes
+  while Unity rebuilds its `Library` cache (not in git).
+- Most content lives in `Assets/FieldShift/Resources/FieldShift/catalog.json` and the C# scripts, which merge cleanly.
+  Avoid editing the scene at the same time as someone else; the game builds its world from code, so you rarely need to.
+
+## Build and host the web version
+
+1. In Unity: **Field Shift → Build for Web** (or, with the editor closed:
+   `Unity -batchmode -quit -projectPath . -buildTarget WebGL -executeMethod FieldShift.EditorTools.WebBuild.Run -logFile Logs/webgl-build.log`).
+   The playable site lands in `Builds/WebGL` (about 40 MB, not committed).
+2. Try it locally: serve the folder with any static server (for example `python3 -m http.server -d Builds/WebGL 8000`)
+   and open http://localhost:8000. Opening `index.html` straight from disk does not work.
+3. Host it:
+   - **itch.io** (simplest): zip the *contents* of `Builds/WebGL` (so `index.html` is at the top of the zip), create a
+     project of kind HTML, upload the zip, tick "This file will be played in the browser", set the viewport to
+     1280 x 720 and turn on the fullscreen button.
+   - **GitHub Pages**: copy the contents of `Builds/WebGL` into a folder that Pages serves (for example `docs/play/` on
+     the main branch) and enable Pages for that branch and folder in the repo settings.
+   The build uses gzip with decompression fallback, so it plays on both without special server settings.
+
+The build script turns on the PC quality level for the web and keeps the shader variants the game enables at runtime;
+see `Assets/FieldShift/Scripts/Editor/WebBuild.cs`.
+
 ## What is real data
 
 | What | Source | Where it is used |
