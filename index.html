@@ -34,8 +34,8 @@
       companyName: "Field Shift team",
       productName: "Field Shift",
       productVersion: "0.1.0",
-      // sharp enough on high-DPI screens without tripling the pixels the GPU has to draw
-      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
+      // one game pixel per CSS pixel: high-DPI screens would otherwise make the GPU draw 2-4 times as many
+      devicePixelRatio: 1,
     }, (progress) => {
       document.querySelector("#fill").style.width = (100 * progress) + "%";
     }).then(() => {
