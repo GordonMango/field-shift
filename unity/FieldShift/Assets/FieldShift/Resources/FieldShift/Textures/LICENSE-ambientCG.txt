@@ -1,0 +1,14 @@
+Terrain textures from ambientCG (https://ambientcg.com), released under CC0 1.0 Universal (public domain).
+Grass_*       Grass004
+Soil_*        Ground048
+Rock_*        Rock058
+ForestFloor_* Ground078
+Bark_*        Bark014
+Siding_*      WoodSiding009
+Steel_*       CorrugatedSteel005
+Shingles_*    RoofingTiles006
+Foliage_GrassTuft.png   composited from Foliage001
+Foliage_LeafCluster.png composited from LeafSet024
+Foliage_FirBranch.png   cut from LeafSet019
+Foliage_Wheat.png       drawn procedurally (Tools/build_foliage.py)
+Sky: Poly Haven "Kloofendal 48d Partly Cloudy (Pure Sky)", CC0 (Resources/FieldShift/Sky/Sky.hdr)

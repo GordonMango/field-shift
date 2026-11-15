@@ -1,0 +1,17 @@
+{
+ "source": "Reserve boundaries: Natural Resources Canada 'Aboriginal Lands of Canada Legislative Boundaries' (GeoBase import in OpenStreetMap, ODbL). Water: OpenStreetMap contributors (ODbL).",
+ "grid": 400,
+ "cellMeters": 20.0,
+ "layout": "uint8 reserve id grid (row 0 = south) followed by uint8 water grid, same size",
+ "reserves": [
+  {
+   "id": 1,
+   "name": "Upper Sumas 6",
+   "osmId": 6791772,
+   "wikidata": "Q22396391",
+   "areaKm2": 2.16,
+   "cells": 5430
+  }
+ ],
+ "waterCells": 2024
+}
