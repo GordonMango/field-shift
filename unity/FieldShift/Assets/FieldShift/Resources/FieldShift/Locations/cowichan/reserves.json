@@ -1,0 +1,41 @@
+{
+ "source": "Reserve boundaries: Natural Resources Canada 'Aboriginal Lands of Canada Legislative Boundaries' (GeoBase import in OpenStreetMap, ODbL). Water: OpenStreetMap contributors (ODbL).",
+ "grid": 400,
+ "cellMeters": 20.0,
+ "layout": "uint8 reserve id grid (row 0 = south) followed by uint8 water grid, same size",
+ "reserves": [
+  {
+   "id": 1,
+   "name": "Cowichan 1",
+   "osmId": 2092741,
+   "wikidata": "Q5179705",
+   "areaKm2": 23.38,
+   "cells": 32542
+  },
+  {
+   "id": 2,
+   "name": "Cowichan 9",
+   "osmId": 2092742,
+   "wikidata": "Q22406251",
+   "areaKm2": 0.17,
+   "cells": 448
+  },
+  {
+   "id": 3,
+   "name": "Theik 2",
+   "osmId": 9543990,
+   "wikidata": "Q22494003",
+   "areaKm2": 0.34,
+   "cells": 859
+  },
+  {
+   "id": 4,
+   "name": "Kil-Pah-Las 3",
+   "osmId": 9543991,
+   "wikidata": "Q22404573",
+   "areaKm2": 0.24,
+   "cells": 355
+  }
+ ],
+ "waterCells": 2361
+}

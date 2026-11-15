@@ -198,6 +198,31 @@ table.stats tr.total td { font-family: var(--pixel); font-size: 12px; color: var
 .manual-body .lead .px { width: 24px; height: 24px; }
 .manual-body li .px { width: 18px; height: 18px; }
 
+/* ---------- field simulation additions ---------- */
+.tip.mild { border-color: var(--blue); background: #0b1830; margin: 10px 0; } .tip.mild b { color: var(--blue); } .tip.mild .btn { margin-top: 8px; display: inline-block; }
+.bar.health i { background: var(--green); } .bar.soil i { background: #c0763e; }
+.prep-banner { position: absolute; top: 44px; left: 50%; transform: translateX(-50%); font-family: var(--pixel); font-size: 9px; line-height: 1.6; color: #1a1200; background: var(--accent); border: 3px solid #fff3b0; padding: 8px 12px; box-shadow: 4px 4px 0 #000; pointer-events: none; text-align: center; max-width: 92%; animation: blink 1.2s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0.75; } }
+.hank { position: absolute; left: 12px; bottom: 12px; display: flex; align-items: flex-end; gap: 8px; max-width: min(520px, 80%); opacity: 0; transform: translateY(12px); transition: all .2s steps(3); pointer-events: none; z-index: 5; }
+.hank.show { opacity: 1; transform: none; pointer-events: auto; cursor: pointer; }
+.hank .px.big { width: 48px; height: 72px; filter: drop-shadow(3px 3px 0 #000); }
+.hank .guide-box { padding: 14px 12px 10px; }
+.hank .guide-box p { font-size: 18px; }
+.forecast .fc { display: grid; grid-template-columns: 52px 22px 1fr 54px 58px; align-items: center; gap: 4px; padding: 2px 0; border-bottom: 2px dotted #1f2d4d; font-size: 16px; }
+.forecast .fd { color: var(--muted); } .forecast .fr { color: var(--water); text-align: right; } .forecast .fw { color: var(--muted); text-align: right; }
+.forecast .px { width: 18px; height: 18px; }
+.inspect .irow { display: grid; grid-template-columns: 78px 1fr 74px; align-items: center; gap: 6px; padding: 3px 0; font-size: 16px; }
+.inspect .irow span:first-child { color: var(--muted); } .inspect .irow b { font-weight: 400; text-align: right; }
+.inspect .small { font-size: 15px; margin-top: 4px; } .inspect .px { width: 16px; height: 16px; }
+.ibar { position: relative; display: block; height: 10px; background: #000; border: 2px solid #1f2d4d; }
+.ibar i { display: block; height: 100%; background: var(--green); }
+.ibar.bad i { background: var(--red); } .ibar.dry i { background: var(--accent2); } .ibar.wet i { background: var(--water); } .ibar.flood i { background: #3a7bff; } .ibar.soil i { background: #c0763e; } .ibar.pest i { background: #a07a3a; }
+.ibar u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #fff; }
+.hot { color: var(--red); font-style: normal; }
+.stars { color: var(--accent); margin-left: 8px; }
+.analysis .good { color: var(--green); font-family: var(--pixel); font-size: 7px; } .analysis .bad { color: var(--red); font-family: var(--pixel); font-size: 7px; }
+.stage-btn .lock { font-family: var(--pixel); font-size: 6px; color: var(--muted); }
+
 @media (max-width: 900px) {
   .pillars, .setup-grid, .stage-list, .two-col { grid-template-columns: 1fr; }
   #game-main { flex-direction: column; }

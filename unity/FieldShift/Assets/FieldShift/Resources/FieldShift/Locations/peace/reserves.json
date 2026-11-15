@@ -1,0 +1,8 @@
+{
+ "source": "Reserve boundaries: Natural Resources Canada 'Aboriginal Lands of Canada Legislative Boundaries' (GeoBase import in OpenStreetMap, ODbL). Water: OpenStreetMap contributors (ODbL).",
+ "grid": 400,
+ "cellMeters": 20.0,
+ "layout": "uint8 reserve id grid (row 0 = south) followed by uint8 water grid, same size",
+ "reserves": [],
+ "waterCells": 1278
+}

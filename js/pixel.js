@@ -78,6 +78,12 @@ const Pixel = (() => {
     water: [
       '.....b......', '....bib.....', '....bib.....', '...biib.....', '...biiib....', '..biiiiib...',
       '..biIiiib...', '.biIiiiiib..', '.biIIiiiib..', '.bbiiiiibb..', '..bbbbbbb...', '............'],
+    sprout: [
+      '............', '.....ll.....', '...llgl.ll..', '..lgGgllgl..', '...lggGgGl..', '....lgGgl...',
+      '......g.....', '......g.....', '.....Gg.....', '..TTTTTTTT..', '.TtTtTTtTtT.', '............'],
+    soil: [
+      '............', '............', '............', '..g..l...g..', '.lGl.gl.lGl.', 'TTTTTTTTTTTT',
+      'tTtTtTtTtTtT', 'TtTmTtTTtTmT', 'tTtTtmTtTtTt', 'TmTtTtTtmTtT', 'tTtTtTtTtTtT', '............'],
     farmer: [
       '......ssss......', '.....ssssss.....', '....sSSSSSSs....', '..ssssssssssss..', '..SSSSSSSSSSSS..', '....pppppppp....',
       '....pkppppkp....', '....pppppppp....', '....ppprrppp....', '.....pppppp.....', '......rrrr......', '....rrBBBBrr....',
@@ -106,8 +112,8 @@ const Pixel = (() => {
 
   // swap the emoji icons in CONTENT for sprites
   function install() {
-    Object.values(CONTENT.ITEMS).forEach(it => { it.emoji = it.icon; it.icon = img(it.id); });
-    Object.values(CONTENT.THREATS).forEach(t => { t.emoji = t.icon; t.icon = img(t.id); });
+    Object.values(CONTENT.ITEMS).forEach(it => { it.icon = img(it.id); });
+    Object.values(CONTENT.HAZARDS).forEach(t => { t.icon = img(t.id); });
   }
   return { render, img, install, MAPS };
 })();

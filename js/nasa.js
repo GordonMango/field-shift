@@ -1,12 +1,12 @@
 /* ============================================================
    NASA POWER data module
    Pulls a year of daily weather for a lat/lon from the NASA POWER
-   API (MERRA-2 / GEOS), turns it into 52 weekly "threat indices",
+   API (MERRA-2 / GEOS), turns it into 52 weekly "hazard indices",
    and falls back to a seeded climatology if the request fails.
    ============================================================ */
 const NASA = (() => {
   const BASE = 'https://power.larc.nasa.gov/api/temporal/daily/point';
-  const PARAMS = ['T2M', 'T2M_MAX', 'T2M_MIN', 'PRECTOTCORR', 'WS2M', 'RH2M', 'GWETROOT'];
+  const PARAMS = ['T2M', 'T2M_MAX', 'T2M_MIN', 'PRECTOTCORR', 'WS2M', 'RH2M', 'GWETROOT', 'WD2M'];
   const FILL = -999;
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -51,16 +51,17 @@ const NASA = (() => {
         date: d,
         t: num(p.T2M[d]), tmax: num(p.T2M_MAX[d]), tmin: num(p.T2M_MIN[d]),
         precip: num(p.PRECTOTCORR[d]), wind: num(p.WS2M[d]), rh: num(p.RH2M[d]), soil: num(p.GWETROOT[d]),
+        wd: p.WD2M ? num(p.WD2M[d]) : null,
       }));
-      ['t', 'tmax', 'tmin', 'precip', 'wind', 'rh', 'soil'].forEach(k => fillGaps(days, k));
+      ['t', 'tmax', 'tmin', 'precip', 'wind', 'rh', 'soil', 'wd'].forEach(k => fillGaps(days, k));
       const valid = days.filter(d => d.t !== null).length;
       if (days.length < 300 || valid < 300) throw new Error('Year incomplete in POWER archive');
       onStatus(`Received ${days.length} days of NASA POWER data (MERRA-2).`);
-      return { days, weeks: weekly(days), source: 'live', url, lat, lon, year };
+      return finish({ days, weeks: weekly(days), source: 'live', url, lat, lon, year });
     } catch (err) {
       onStatus(`NASA POWER unavailable (${err.message}). Using built-in climatology for this location.`);
       const days = synthetic(lat, lon, year);
-      return { days, weeks: weekly(days), source: 'fallback', url, lat, lon, year, error: err.message };
+      return finish({ days, weeks: weekly(days), source: 'fallback', url, lat, lon, year, error: err.message });
     } finally {
       clearTimeout(timer);
     }
@@ -68,7 +69,7 @@ const NASA = (() => {
 
   function num(v) { return (v === undefined || v === null || v <= FILL + 1) ? null : v; }
 
-  // ---------- weekly aggregation + threat indices ----------
+  // ---------- weekly aggregation + hazard indices ----------
   function weekly(days) {
     const weeks = [];
     for (let w = 0; w < 52; w++) {
@@ -106,17 +107,18 @@ const NASA = (() => {
   }
 
   // Find the start week (wrapping) whose `len`-week window has the highest summed index for `type`.
-  function bestWindow(weeks, type, len) {
-    let best = 0, bestScore = -1;
+  // Only growing-season weeks (mean temperature >= minT) count, so a "drought" stage never lands in a frozen winter.
+  function bestWindow(weeks, type, len, minT = -99) {
+    let best = 0, bestScore = -Infinity;
     for (let s = 0; s < weeks.length; s++) {
       let score = 0;
-      for (let i = 0; i < len; i++) score += weeks[(s + i) % weeks.length].index[type];
+      for (let i = 0; i < len; i++) { const wk = weeks[(s + i) % weeks.length]; score += wk.t >= minT ? wk.index[type] : -1; }
       if (score > bestScore) { bestScore = score; best = s; }
     }
     return { start: best, score: bestScore };
   }
 
-  // Dominant threat for a week (for sky colour / forecast text)
+  // Dominant hazard for a week (for sky colour / forecast text)
   function dominant(week) {
     let top = null, v = 0.12;
     for (const [k, val] of Object.entries(week.index)) if (val > v) { v = val; top = k; }
@@ -156,9 +158,51 @@ const NASA = (() => {
       soil = clamp(soil * 0.93 + precip * 0.012 + 0.015 - (tmax > 30 ? 0.01 : 0), 0.05, 0.95);
       const d = new Date(start.getTime() + doy * 86400000);
       const date = d.toISOString().slice(0, 10).replace(/-/g, '');
-      days.push({ date, t, tmax, tmin, precip, wind, rh, soil });
+      days.push({ date, t, tmax, tmin, precip, wind, rh, soil, wd: (nh ? 270 : 110) + (rnd() - 0.5) * 80 });
     }
     return days;
+  }
+
+  // ---------- agronomy helpers ----------
+  // Day of year from YYYYMMDD
+  function doyOf(yyyymmdd) {
+    const y = +yyyymmdd.slice(0, 4), m = +yyyymmdd.slice(4, 6) - 1, d = +yyyymmdd.slice(6, 8);
+    return Math.round((Date.UTC(y, m, d) - Date.UTC(y, 0, 1)) / 86400000) + 1;
+  }
+  // FAO-56 extraterrestrial radiation (eq. 21), converted to mm/day of evaporation equivalent.
+  function extraterrestrialMm(lat, doy) {
+    const phi = lat * Math.PI / 180;
+    const dr = 1 + 0.033 * Math.cos(2 * Math.PI * doy / 365);
+    const dec = 0.409 * Math.sin(2 * Math.PI * doy / 365 - 1.39);
+    const ws = Math.acos(clamp(-Math.tan(phi) * Math.tan(dec), -1, 1));
+    const ra = (24 * 60 / Math.PI) * 0.082 * dr * (ws * Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.sin(ws));
+    return Math.max(0, ra) * 0.408;
+  }
+  // FAO-56 Hargreaves reference evapotranspiration (mm/day), nudged for wind and humidity.
+  function et0(day, lat) {
+    const ra = extraterrestrialMm(lat, day.doy);
+    const range = Math.max(1, day.tmax - day.tmin);
+    let e = 0.0023 * ra * (day.t + 17.8) * Math.sqrt(range);
+    e *= clamp(1 + 0.05 * (day.wind - 2), 0.85, 1.4);
+    e *= clamp(1 + (50 - day.rh) * 0.006, 0.8, 1.25);
+    return clamp(e, 0.2, 12);
+  }
+  const COMPASS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  function compass(deg) { return COMPASS[Math.round(((deg % 360) + 360) % 360 / 45) % 8]; }
+
+  // Attach per-day ET0, the location's wind thresholds and the prevailing wind direction.
+  function finish(data) {
+    for (const d of data.days) { d.doy = doyOf(d.date); d.et0 = et0(d, data.lat); }
+    const winds = data.days.map(d => d.wind).sort((a, b) => a - b);
+    const pct = q => winds[Math.min(winds.length - 1, Math.floor(q * winds.length))];
+    // Erosion starts at the windiest ~15% of days for this place, never below 3 m/s or above 5.5 m/s at 2 m.
+    data.windErode = clamp(pct(0.85), 3, 5.5);
+    // Prevailing direction: wind-speed-weighted vector mean of the days on which erosion is possible.
+    let x = 0, y = 0;
+    const hasDir = data.days.some(d => d.wd);
+    if (hasDir) for (const d of data.days) if (d.wd !== null && d.wd !== undefined && d.wind >= pct(0.6)) { x += Math.sin(d.wd * Math.PI / 180) * d.wind; y += Math.cos(d.wd * Math.PI / 180) * d.wind; }
+    data.prevailing = (x || y) ? compass(Math.atan2(x, y) * 180 / Math.PI) : null;
+    return data;
   }
 
   // ---------- formatting helpers ----------
@@ -168,5 +212,5 @@ const NASA = (() => {
     return `${MONTHS[m]} ${d}${withYear ? ', ' + y : ''}`;
   }
 
-  return { fetchYear, weekly, bestWindow, dominant, dateLabel, buildUrl, PARAMS };
+  return { fetchYear, weekly, bestWindow, dominant, dateLabel, buildUrl, PARAMS, et0 };
 })();

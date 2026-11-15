@@ -1,0 +1,58 @@
+=== Sumas Prairie: parcels reserve=29 water=6 steep=0 low=166 floodBase=1.2 m; farm at (9,9) elev 2.9 m
+  Live 2021 with usual practice on 4 ha: money 30,000 -> 17,558
+    event: Flood: 87 mm of rain in three days. Low fields are under water.
+    event: Flood: 69 mm of rain in three days. Low fields are under water.
+    event: Flood: 67 mm of rain in three days. Low fields are under water.
+    harvests: Silage corn harvested: 34.2 t/ha, $1604 after harvest costs. | Silage corn harvested: 34.2 t/ha, $1604 after harvest costs. | Silage corn harvested: 34.1 t/ha, $1599 after harvest costs. | Silage corn harvested: 34.2 t/ha, $1603 after harvest costs.
+  Report 2021: rain 2138 mm, max 43 C (Jun 28), wettest 3 days 160 mm (Nov 15)
+    Common local rotation        net    -2,532  irr  225 mm  leach  30.8  OM  -0.15  loss d0/h418/fl0/fr0/p0  lost 0  [Silage corn x4]
+    Your plan                    net    -2,532  irr  225 mm  leach  30.8  OM  -0.15  loss d0/h418/fl0/fr0/p0  lost 0  [Silage corn x4]
+    Break crop plus cover crop   net     7,769  irr  125 mm  leach  30.6  OM  +0.08  loss d0/h1113/fl0/fr0/p0  lost 0  [Squash and pumpkins x4]
+    With Indigenous knowledge    net     6,259  irr   63 mm  leach  18.5  OM  +0.18  loss d1826/h557/fl0/fr0/p0  lost 0  [Squash and pumpkins x2, Wapato wetland garden x2]
+  Report 2022: rain 1734 mm, max 36 C (Aug 17), wettest 3 days 95 mm (Dec 26)
+    Common local rotation        net    -3,835  irr  175 mm  leach  73.2  OM  -0.14  loss d0/h0/fl162/fr0/p0  lost 0  [Silage corn x4]
+    Your plan                    net    -3,835  irr  175 mm  leach  73.2  OM  -0.14  loss d0/h0/fl162/fr0/p0  lost 0  [Silage corn x4]
+    Break crop plus cover crop   net     2,055  irr   75 mm  leach  37.4  OM  +0.05  loss d0/h0/fl630/fr0/p0  lost 0  [Squash and pumpkins x4]
+    With Indigenous knowledge    net     1,672  irr   38 mm  leach  26.1  OM  +0.14  loss d2258/h0/fl315/fr0/p0  lost 0  [Squash and pumpkins x2, Wapato wetland garden x2]
+=== Oliver: parcels reserve=8 water=1 steep=26 low=40 floodBase=301.9 m; farm at (9,9) elev 307.9 m
+  Live 2021 with usual practice on 4 ha: money 30,000 -> 24,177
+    event: River low after 12 mm of rain in 30 days. Irrigation cut by half.
+    harvests: Alfalfa hay harvested: 2.6 t/ha, $621 after harvest costs. | Alfalfa hay harvested: 2.6 t/ha, $621 after harvest costs. | Alfalfa hay harvested: 2.6 t/ha, $621 after harvest costs. | Alfalfa hay harvested: 2.6 t/ha, $621 after harvest costs.
+  Report 2021: rain 285 mm, max 45 C (Jun 29), wettest 3 days 19 mm (Oct 24)
+    Common local rotation        net     4,087  irr  650 mm  leach  19.0  OM  +0.06  loss d1803/h154/fl0/fr0/p0  lost 0  [Alfalfa hay x4]
+    Your plan                    net     4,087  irr  650 mm  leach  19.0  OM  +0.06  loss d1803/h154/fl0/fr0/p0  lost 0  [Alfalfa hay x4]
+    Break crop plus cover crop   net     4,710  irr  325 mm  leach   4.0  OM  +0.12  loss d3932/h2640/fl0/fr0/p0  lost 0  [Squash and pumpkins x4]
+    With Indigenous knowledge    net     6,651  irr  288 mm  leach   4.4  OM  +0.15  loss d913/h1363/fl0/fr0/p0  lost 0  [Native shrub and plant margin x1, Squash and pumpkins x3]
+  Report 2022: rain 338 mm, max 40 C (Jul 28), wettest 3 days 27 mm (Jun 4)
+    Common local rotation        net     4,584  irr  550 mm  leach  25.6  OM  +0.06  loss d1369/h49/fl0/fr847/p0  lost 0  [Alfalfa hay x4]
+    Your plan                    net     4,584  irr  550 mm  leach  25.6  OM  +0.06  loss d1369/h49/fl0/fr847/p0  lost 0  [Alfalfa hay x4]
+    Break crop plus cover crop   net     7,805  irr  300 mm  leach   5.5  OM  +0.11  loss d0/h0/fl0/fr0/p0  lost 0  [Squash and pumpkins x4]
+    With Indigenous knowledge    net     5,354  irr  213 mm  leach   6.7  OM  +0.14  loss d661/h0/fl0/fr0/p0  lost 0  [Native shrub and plant margin x1, Squash and pumpkins x3]
+=== Cowichan Valley: parcels reserve=20 water=19 steep=18 low=202 floodBase=0.0 m; farm at (10,9) elev 1.9 m
+  Live 2021 with usual practice on 4 ha: money 30,000 -> 20,527
+    event: River low after 11 mm of rain in 30 days. Irrigation cut by half.
+    event: River low after 12 mm of rain in 30 days. Irrigation cut by half.
+    harvests: Grass hay harvested: 2.2 t/ha, $419 after harvest costs. | Grass hay harvested: 2.2 t/ha, $419 after harvest costs. | Grass hay harvested: 2.2 t/ha, $419 after harvest costs. | Grass hay harvested: 2.2 t/ha, $419 after harvest costs.
+  Report 2021: rain 895 mm, max 41 C (Jun 28), wettest 3 days 65 mm (Nov 15)
+    Common local rotation        net       437  irr  250 mm  leach   7.6  OM  +0.04  loss d443/h71/fl0/fr0/p0  lost 0  [Grass hay x4]
+    Your plan                    net       437  irr  250 mm  leach   7.6  OM  +0.04  loss d443/h71/fl0/fr0/p0  lost 0  [Grass hay x4]
+    Break crop plus cover crop   net    13,695  irr  225 mm  leach  33.5  OM  +0.15  loss d0/h0/fl0/fr0/p0  lost 0  [Squash and pumpkins x4]
+    With Indigenous knowledge    net    10,113  irr  169 mm  leach  27.0  OM  +0.17  loss d190/h0/fl0/fr0/p0  lost 0  [Squash and pumpkins x3, Camas meadow x1]
+  Report 2022: rain 797 mm, max 32 C (Jul 29), wettest 3 days 44 mm (Dec 27)
+    Common local rotation        net       -93  irr  225 mm  leach  15.8  OM  +0.04  loss d0/h0/fl0/fr0/p0  lost 0  [Grass hay x4]
+    Your plan                    net       -93  irr  225 mm  leach  15.8  OM  +0.04  loss d0/h0/fl0/fr0/p0  lost 0  [Grass hay x4]
+    Break crop plus cover crop   net    11,848  irr  125 mm  leach  28.0  OM  +0.13  loss d0/h0/fl0/fr0/p0  lost 0  [Squash and pumpkins x4]
+    With Indigenous knowledge    net     8,609  irr   94 mm  leach  22.6  OM  +0.16  loss d170/h0/fl0/fr0/p0  lost 0  [Squash and pumpkins x3, Camas meadow x1]
+=== Dawson Creek: parcels reserve=0 water=0 steep=0 low=68 floodBase=657.3 m; farm at (9,9) elev 661.2 m
+  Live 2021 with usual practice on 4 ha: money 30,000 -> 17,678
+    harvests: Canola harvested: 1.1 t/ha, $692 after harvest costs. | Canola harvested: 1.1 t/ha, $692 after harvest costs. | Canola harvested: 1.1 t/ha, $692 after harvest costs. | Canola harvested: 1.1 t/ha, $692 after harvest costs.
+  Report 2021: rain 438 mm, max 39 C (Jun 29), wettest 3 days 25 mm (Aug 22)
+    Common local rotation        net    -1,612  irr    0 mm  leach  12.7  OM  -0.08  loss d2418/h752/fl0/fr0/p0  lost 0  [Canola x4]
+    Your plan                    net    -1,612  irr    0 mm  leach  12.7  OM  -0.08  loss d2418/h752/fl0/fr0/p0  lost 0  [Canola x4]
+    Break crop plus cover crop   net      -828  irr    0 mm  leach  13.1  OM  +0.05  loss d1002/h91/fl0/fr0/p0  lost 0  [Spring barley x4]
+    With Indigenous knowledge    net      -441  irr    0 mm  leach  13.0  OM  +0.07  loss d752/h69/fl0/fr0/p0  lost 0  [Fire-renewed grass and berry margin x1, Spring barley x3]
+  Report 2022: rain 526 mm, max 32 C (Aug 25), wettest 3 days 38 mm (May 29)
+    Common local rotation        net    -2,574  irr    0 mm  leach  40.5  OM  -0.08  loss d1565/h453/fl0/fr1855/p0  lost 0  [Canola x4]
+    Your plan                    net    -2,574  irr    0 mm  leach  40.5  OM  -0.08  loss d1565/h453/fl0/fr1855/p0  lost 0  [Canola x4]
+    Break crop plus cover crop   net    -1,960  irr    0 mm  leach  33.3  OM  +0.04  loss d491/h0/fl0/fr1597/p0  lost 0  [Spring barley x4]
+    With Indigenous knowledge    net    -1,290  irr    0 mm  leach  30.6  OM  +0.07  loss d369/h0/fl0/fr1198/p0  lost 0  [Fire-renewed grass and berry margin x1, Spring barley x3]

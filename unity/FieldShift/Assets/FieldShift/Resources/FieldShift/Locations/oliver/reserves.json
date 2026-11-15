@@ -1,0 +1,17 @@
+{
+ "source": "Reserve boundaries: Natural Resources Canada 'Aboriginal Lands of Canada Legislative Boundaries' (GeoBase import in OpenStreetMap, ODbL). Water: OpenStreetMap contributors (ODbL).",
+ "grid": 400,
+ "cellMeters": 20.0,
+ "layout": "uint8 reserve id grid (row 0 = south) followed by uint8 water grid, same size",
+ "reserves": [
+  {
+   "id": 1,
+   "name": "Osoyoos 1",
+   "osmId": 15139112,
+   "wikidata": "",
+   "areaKm2": 130.29,
+   "cells": 65941
+  }
+ ],
+ "waterCells": 3119
+}

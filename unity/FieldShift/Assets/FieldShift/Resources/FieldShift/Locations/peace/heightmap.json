@@ -1,0 +1,14 @@
+{
+ "source": "NASADEM_HGT v001 tile n55w121 (NASA/JPL reprocessed SRTM, 1 arc-second), via Microsoft Planetary Computer",
+ "sizeMeters": 8000.0,
+ "resolution": 1025,
+ "south": 55.72406755300036,
+ "north": 55.795932446999636,
+ "west": -120.30386166665842,
+ "east": -120.17613833334157,
+ "datumMeters": 610,
+ "heightRangeMeters": 250.0,
+ "minElevation": 630.2731763968259,
+ "maxElevation": 840.356809198704,
+ "layout": "uint16 little-endian, row 0 = south edge, column 0 = west edge"
+}
